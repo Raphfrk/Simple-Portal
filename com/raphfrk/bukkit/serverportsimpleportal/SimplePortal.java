@@ -23,6 +23,7 @@ public class SimplePortal extends JavaPlugin {
 	public ServerPortCoreAPI serverPortCore;
 	public PluginDescriptionFile pdfFile;
 	public SimplePortalPlayerListener playerListener = new SimplePortalPlayerListener(this);
+	public DependencyManager dm = new DependencyManager(this);
 	
 	public PortalManager portalManager = new PortalManager(this);
 	PluginManager pm;
@@ -35,20 +36,31 @@ public class SimplePortal extends JavaPlugin {
 	}
 
 	public void onEnable() {
-		
+				
 		server = getServer();
 		pm = server.getPluginManager();
 		sm = server.getServicesManager();
 		
 		log = server.getLogger();
 		
+		pluginDirectory = getDataFolder();
+		
 		if(!pluginDirectory.exists()) {
 			pluginDirectory.mkdirs();
+		}
+		
+		pdfFile = getDescription();
+		
+		if(dm.connectEventLink() && dm.connectServerPortCore() && pm.isPluginEnabled(this)) {
+			log(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 		}
 		
 		portalManager.readPortals();
 		
 		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
+		
+		getCommand("simpset").setExecutor(new SetPortalCommand(this));
+		getCommand("simpdel").setExecutor(new DelPortalCommand(this));
 		
 	}
 	

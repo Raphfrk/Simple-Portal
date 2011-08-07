@@ -32,11 +32,19 @@ public class SimplePortalPlayerListener extends PlayerListener {
 		
 		IntLocation newLocation = new IntLocation(to.getBlockX(), to.getBlockY(), to.getBlockZ(), to.getWorld().getName());
 		
-		if(oldLocation==null || !oldLocation.getWorld().getName().equals(newLocation.getWorld().getName())) {
+		if(oldLocation == null) {
+			oldPositions.put(id, newLocation);
+			return;
+		}
+		
+		if(!oldLocation.getWorld().getName().equals(newLocation.getWorld().getName())) {
+			oldPositions.put(id, newLocation);
 			return;
 		}
 		
 		if(oldLocation.equals(newLocation)) return;
+		
+		oldPositions.put(id, newLocation);
 		
 		String target = p.portalManager.portals.get(newLocation);
 		

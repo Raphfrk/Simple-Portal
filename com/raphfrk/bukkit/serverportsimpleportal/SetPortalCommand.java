@@ -46,6 +46,12 @@ public class SetPortalCommand implements CommandExecutor {
 		
 		p.portalManager.portals.put(source, target);
 		
+		sender.sendMessage("[SimplePortal] added link");
+		sender.sendMessage("FROM: " + source);
+		sender.sendMessage("TO: " + target);
+		
+		p.portalManager.writePortals();
+		
 		return true;
 		
 	}

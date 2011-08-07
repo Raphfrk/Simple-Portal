@@ -16,11 +16,13 @@ public class PortalManager {
 	
 	public void readPortals() {
 		
-		String filename = new File(p.getDataFolder(), "portals.txt").toString();
+		String filename = new File(p.pluginDirectory, "portals.txt").toString();
 		
 		String[] portalStrings = MiscUtils.fileToString(filename);
 		
 		portals = new HashMap<IntLocation, String>();
+		
+		int count = 0;
 		
 		if(portalStrings != null) {
 			for(String portalString : portalStrings) {
@@ -37,14 +39,16 @@ public class PortalManager {
 						continue;
 					}
 					String target = split1[1];
-					portals.put(loc, target);
+
 					try {
 						new ServerPortLocationMirror(target);
 					} catch (IllegalArgumentException iae) {
 						SimplePortal.log("Invalid portal target read from file");
 						continue;
 					}
-					System.out.println("Read: " + loc + " -> " + target);
+					
+					portals.put(loc, target);
+					count ++;
 				}
 				
 			}
@@ -52,19 +56,26 @@ public class PortalManager {
 			SimplePortal.log("Unable to read portals file");
 		}
 		
+		SimplePortal.log("Loaded " + count + " portal start blocks");
+		
 	}
 	
 	public void writePortals() {
 		ArrayList<String> lines = new ArrayList<String>();
 		
+		int count = 0;
+		
 		for(IntLocation loc : portals.keySet()) {
 			String target = portals.get(loc);
 			if(target != null) {
 				lines.add(loc + ":" + target);
+				count ++;
 			}
 		}
 		
-		String filename = new File(p.getDataFolder(), "portals.txt").toString();
+		SimplePortal.log("Saving " + count + " portal start blocks");
+		
+		String filename = new File(p.pluginDirectory, "portals.txt").toString();
 		
 		MiscUtils.stringToFile(lines, filename);
 	}

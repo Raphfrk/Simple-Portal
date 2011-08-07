@@ -90,7 +90,7 @@ public class IntLocation implements Comparable<IntLocation> {
 		int cnt;
 		this.worldName = worldName;
 		for(cnt=0;cnt<worlds.size();cnt++) {
-			if(worlds.get(cnt).getName().equalsIgnoreCase(worldName)) {
+			if(worlds.get(cnt).getName().trim().equalsIgnoreCase(worldName.trim())) {
 				this.worldIndex = cnt;
 				this.world = worlds.get(cnt);
 				this.worldName = worldName;
